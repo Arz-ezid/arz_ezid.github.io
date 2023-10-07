@@ -124,3 +124,131 @@ $(document).ready(function() { "use strict";
     window.smoothScroll = 1;
   }
   
+
+ //Check hash on start
+  function updateHash(){
+    var hashLink = window.location.href.split("#")[1];
+    if (hashLink) {
+      //find a slide
+      if ( $('.slide[data-name="' +hashLink+ '"]').length > 0 ){
+        //asking for the slide?
+        var requestedElement = $('.slide[data-name="' +hashLink+ '"]');
+
+        //scroll to a desired slide
+        if ( (window.isMobile && window.isSimplifiedMobile) || window.isScroll ){
+          //scroll mode
+          if (requestedElement.length) {
+            if (!window.preload || window.loaded) {
+              $('html,body').stop().clearQueue().animate({scrollTop:requestedElement.position().top},window.effectSpeed);
+            } else {
+              $(window).on('load', function(){
+                $('html,body').stop().clearQueue().animate({scrollTop:requestedElement.position().top},window.effectSpeed);
+              });
+            }
+          }
+        } else {
+          //slide mode
+          window.stage = $('.slide').index(requestedElement) + 1;
+          showSlide(window.stage);
+        }
+      }
+    }
+  }
+
+  updateHash();
+  
+  //Listen history changes
+  $(window).on('popstate',function(e) {
+    setTimeout(function(){
+      updateHash();
+    },100);
+    e.preventDefault();
+  });
+  
+  //Show Progress Bar
+  if (window.preload){
+    var imgs = [];
+    $("*").each(function() { 
+      if($(this).css("background-image") !== "none") { 
+        imgs.push($(this).css("background-image").replace(/.*\s?url\([\'\"]?/, '').replace(/[\'\"]?\).*/, '')); 
+      } else if ($(this).is('img')){
+        imgs.push($(this).attr("src")); 
+      }
+    });
+
+    window.images = imgs.length;
+    window.progressBar = $('.progress-bar');
+
+    //preload images (sort of)
+    $.cacheImage(imgs, { complete: function () {
+      window.loadingProgress++;
+      updateProgressBar();
+    }});
+
+    //show progress
+    function updateProgressBar(){
+
+      //loading
+      var progress = window.loadingProgress/window.images;
+
+      // animate
+      window.progressBar.css('width',progress * 100 + "%");
+
+      if (window.loadingProgress == window.images) {
+        window.progressBar.addClass('loaded');
+      }
+    }
+
+    updateProgressBar();
+  }
+ 
+  //Initiate slide
+  showSlide(window.stage); 
+
+  $('.grid.masonry').masonry({
+    itemSelector: 'li',
+    transitionDuration: '0.1s'
+  });
+
+  $('.grid.masonry').imagesLoaded().progress( function() {
+    $('.grid.masonry').masonry('layout');
+  });
+  
+  //On page load
+  if (!window.preload || !window.images || window.loaded) {
+    runTheCode();
+  }
+
+  if (!window.loaded) {
+    $(window).on('load', function(){
+      runTheCode();
+    });
+  }
+
+  function runTheCode(){
+    $html.addClass('page-loaded');
+    window.inAction = 0;
+    window.blockScroll = 0;
+    window.loaded = 1;
+    
+    setTimeout(function(){
+      if (window.isScroll){
+        updateScroll();
+        updateNavigation();
+      } if (window.isMobile && window.isSimplifiedMobile){
+        $('.slide').addClass('selected animate active');
+        updateScroll();
+        updateNavigation();
+      } else {
+        showSlide(window.stage);
+      }
+    },500);
+  }
+  
+  
+  
+  
+  
+  
+  
+   
