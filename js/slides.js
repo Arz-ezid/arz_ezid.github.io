@@ -2150,12 +2150,6 @@ window.isLinux = navigator.platform.toUpperCase().indexOf('LINUX')!==-1;
 if (window.isSafari){$html.addClass('safari');}
 if (window.isFirefox){$html.addClass('firefox');}
 if (window.isChrome){$html.addClass('chrome');}
-if (window.isMSIE){$html.addClass('msie');}
-if (window.isEdge){$html.addClass('edge');}
-if (window.isAndroid){$html.addClass('android');}
-if (window.isWindows){$html.addClass('windows');}
-if (window.isOSX){$html.addClass('osx');}
-if (window.isLinux){$html.addClass('linux');}
 
 //Retina
 window.isRetina = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
