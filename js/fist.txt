@@ -1,2 +1,2 @@
-football 10
+football 100
 basketball 100
