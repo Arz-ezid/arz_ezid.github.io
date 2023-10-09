@@ -1,1 +1,2 @@
 football 10
+basketball 100
