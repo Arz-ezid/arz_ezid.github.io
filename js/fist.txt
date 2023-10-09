@@ -1,0 +1,2 @@
+football 100
+basketball 100
